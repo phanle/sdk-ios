@@ -68,7 +68,19 @@ final class PurchaseFlowController: UIViewController {
       navigationController.pushViewController(cartViewController, animated: true)
 
     case .showAfterpayCheckout(let url):
-      presentAfterpayCheckoutModally(loading: url, language: Settings.language)
+      Afterpay.presentWelcomePageModally(over: self.ownedNavigationController,
+                                         aggregator: "deadbeef",
+                                         billing: Contact.mock(), shipping: Contact.mock(),
+                                         items: nil,
+                                         discounts: nil,
+                                         merchant: nil,
+                                         merchantReference: nil,
+                                         taxAmount: Money.mock(),
+                                         shippingAmount: Money.mock(),
+                                         consumerEmail: "test@afterpay.com")
+
+    // Uncomment this to launch checkout modal
+    //      presentAfterpayCheckoutModally(loading: url, language: Settings.language)
 
     case .showAlertForCheckoutURLError(let error):
       let alert = AlertFactory.alert(for: error)
