@@ -13,7 +13,6 @@ final class WelcomeViewController: UIViewController {
   enum Screen {
     case welcome
     case amount
-    case email
   }
 
   // View State
@@ -41,7 +40,6 @@ final class WelcomeViewController: UIViewController {
   // list of all views
   private let welcomeView: WelcomeView
   private let enterAmountView: EnterAmountView
-  private let enterEmailView: EnterEmailView
 
   init(
     aggregator: String,
@@ -74,7 +72,6 @@ final class WelcomeViewController: UIViewController {
     // initiate views
     welcomeView = WelcomeView(continueAction: #selector(updateView))
     enterAmountView = EnterAmountView(continueAction: #selector(updateView))
-    enterEmailView = EnterEmailView(continueAction: #selector(updateView))
 
     super.init(nibName: nil, bundle: nil)
 
@@ -95,8 +92,6 @@ final class WelcomeViewController: UIViewController {
       subview = welcomeView
     case .amount:
       subview = enterAmountView
-    case .email:
-      subview = enterEmailView
     }
 
     view.bringSubviewToFront(subview)
@@ -109,15 +104,12 @@ final class WelcomeViewController: UIViewController {
     view.backgroundColor = .white
 
     welcomeView.backgroundColor = view.backgroundColor
-    enterEmailView.backgroundColor = view.backgroundColor
     enterAmountView.backgroundColor = view.backgroundColor
 
     welcomeView.translatesAutoresizingMaskIntoConstraints = false
-    enterEmailView.translatesAutoresizingMaskIntoConstraints = false
     enterAmountView.translatesAutoresizingMaskIntoConstraints = false
 
     view.addSubview(welcomeView)
-    view.addSubview(enterEmailView)
     view.addSubview(enterAmountView)
 
     reloadView()
@@ -132,11 +124,6 @@ final class WelcomeViewController: UIViewController {
       let amountValue = enterAmountView.amountField.text ?? "0.00"
 
       amount = Money(amount: amountValue, currency: taxAmount.currency)
-      enterEmailView.emailField.text = consumer.email
-      currentScreen = .email
-    case .email:
-      let emailValue = enterEmailView.emailField.text ?? consumer.email
-      consumer = Consumer(phoneNumber: nil, givenNames: nil, surname: nil, email: emailValue)
       // perform checkout here
       dismiss(animated: true, completion: nil)
     }

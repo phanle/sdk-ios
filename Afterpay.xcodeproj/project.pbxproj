@@ -36,7 +36,6 @@
 		DD70771725D223F400401BDB /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70771625D223F400401BDB /* WelcomeViewController.swift */; };
 		DD70771D25D2361900401BDB /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70771C25D2361900401BDB /* WelcomeView.swift */; };
 		DD70772125D2396F00401BDB /* EnterAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70772025D2396F00401BDB /* EnterAmountView.swift */; };
-		DD70772525D23BE300401BDB /* EnterEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70772425D23BE300401BDB /* EnterEmailView.swift */; };
 		DDBD9BFD25D33BFE00008642 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD9BFC25D33BFE00008642 /* Money.swift */; };
 		DDBD9C0225D33C3D00008642 /* Consumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD9C0125D33C3D00008642 /* Consumer.swift */; };
 		DDBD9C0825D33C5D00008642 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD9C0725D33C5D00008642 /* Contact.swift */; };
@@ -97,7 +96,6 @@
 		DD70771625D223F400401BDB /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		DD70771C25D2361900401BDB /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		DD70772025D2396F00401BDB /* EnterAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterAmountView.swift; sourceTree = "<group>"; };
-		DD70772425D23BE300401BDB /* EnterEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterEmailView.swift; sourceTree = "<group>"; };
 		DDBD9BFC25D33BFE00008642 /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
 		DDBD9C0125D33C3D00008642 /* Consumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Consumer.swift; sourceTree = "<group>"; };
 		DDBD9C0725D33C5D00008642 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
@@ -220,7 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				66F9767B2499A11A001D38FA /* Afterpay.swift */,
-				DD70771525D21EE000401BDB /* Welcome */,
+				DD70771525D21EE000401BDB /* Consumer Cards */,
 				946388FB24DD05D400A1227A /* Checkout */,
 				946388FC24DD075400A1227A /* Info */,
 				6691776D24E0CB7C00D0A4B2 /* Model */,
@@ -288,15 +286,14 @@
 			path = Info;
 			sourceTree = "<group>";
 		};
-		DD70771525D21EE000401BDB /* Welcome */ = {
+		DD70771525D21EE000401BDB /* Consumer Cards */ = {
 			isa = PBXGroup;
 			children = (
 				DD70771625D223F400401BDB /* WelcomeViewController.swift */,
 				DD70771C25D2361900401BDB /* WelcomeView.swift */,
 				DD70772025D2396F00401BDB /* EnterAmountView.swift */,
-				DD70772425D23BE300401BDB /* EnterEmailView.swift */,
 			);
-			path = Welcome;
+			path = "Consumer Cards";
 			sourceTree = "<group>";
 		};
 		DDBD9C0025D33C0200008642 /* Consumer Cards */ = {
@@ -498,7 +495,6 @@
 				66EE378724D39FC50029BF42 /* BadgeView.swift in Sources */,
 				66D685B224BD3FB900C7287C /* SwiftUIWrapper.swift in Sources */,
 				DDBD9BFD25D33BFE00008642 /* Money.swift in Sources */,
-				DD70772525D23BE300401BDB /* EnterEmailView.swift in Sources */,
 				666D334C24A48F5C00FCD464 /* ObjcWrapper.swift in Sources */,
 				DD70771D25D2361900401BDB /* WelcomeView.swift in Sources */,
 				DDBD9C1025D33CB000008642 /* Merchant.swift in Sources */,
