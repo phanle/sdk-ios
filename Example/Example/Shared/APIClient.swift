@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Afterpay
 
 private let session = URLSession(configuration: .default)
 
@@ -39,6 +40,7 @@ struct APIClient {
 
   var configuration: (_ completion: @escaping Completion) -> Void
   var checkout: (_ email: String, _ amount: String, _ completion: @escaping Completion) -> Void
+  var consumerCards: (_ payload: ConsumerCardRequest, _ Completion: @escaping Completion) -> Void
 }
 
 extension APIClient {
@@ -48,6 +50,9 @@ extension APIClient {
     },
     checkout: { email, amount, completion in
       session.request(.checkout(email: email, amount: amount), completion: completion)
+    },
+    consumerCards: { payload, completion in
+      session.request(.configuration, completion: completion)
     }
   )
 }
@@ -55,6 +60,7 @@ extension APIClient {
 private enum Endpoint {
   case configuration
   case checkout(email: String, amount: String)
+  case consumerCards
 
   var request: URLRequest? {
     switch self {
@@ -68,6 +74,8 @@ private enum Endpoint {
         // swiftlint:disable:next force_try
         request.httpBody = try! JSONEncoder().encode(CheckoutsRequest(email: email, amount: amount))
       }
+    case .consumerCards:
+      return makeRequest("/v2/consumer_cards")
     }
   }
 
