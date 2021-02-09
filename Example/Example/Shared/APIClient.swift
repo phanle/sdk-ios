@@ -75,15 +75,16 @@ private enum Endpoint {
         request.httpBody = try! JSONEncoder().encode(CheckoutsRequest(email: email, amount: amount))
       }
     case .consumerCards:
-      return makeRequest("/v2/consumer_cards")
+      return makeRequest("/v2/consumer_cards", sandbox: true)
     }
   }
 
   private func makeRequest(
     _ path: String,
+    sandbox: Bool = false,
     configure: ((inout URLRequest) -> Void)? = nil
   ) -> URLRequest? {
-    let baseUrl = URL(string: "http://\(Settings.host):\(Settings.port)")
+    let baseUrl = sandbox ? URL(string: "http://api-plus.us-sandbox.afterpay.com") : URL(string: "http://\(Settings.host):\(Settings.port)")
     var urlComponents = baseUrl.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
     urlComponents?.path = path
 
