@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Afterpay
 
 final class AppFlowController: UIViewController {
 
@@ -17,8 +18,9 @@ final class AppFlowController: UIViewController {
     super.init(nibName: nil, bundle: nil)
 
     let purchaseLogicController = PurchaseLogicController(
-      checkoutURLProvider: Repository.shared.checkout(email:amount:completion:),
+      consumerCardsURLProvider: Repository.shared.consumerCard(payload:completion:),
       email: Settings.email,
+      payload: ConsumerCardRequest.mock(),
       currencyCode: Settings.currencyCode
     )
 

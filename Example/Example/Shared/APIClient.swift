@@ -40,6 +40,8 @@ struct APIClient {
 
   var configuration: (_ completion: @escaping Completion) -> Void
   var checkout: (_ email: String, _ amount: String, _ completion: @escaping Completion) -> Void
+
+  // API Plus
   var consumerCards: (_ payload: ConsumerCardRequest, _ Completion: @escaping Completion) -> Void
 }
 
@@ -52,7 +54,7 @@ extension APIClient {
       session.request(.checkout(email: email, amount: amount), completion: completion)
     },
     consumerCards: { payload, completion in
-      session.request(.configuration, completion: completion)
+      session.request(.consumerCards, completion: completion)
     }
   )
 }
@@ -60,6 +62,8 @@ extension APIClient {
 private enum Endpoint {
   case configuration
   case checkout(email: String, amount: String)
+
+  // API Plus
   case consumerCards
 
   var request: URLRequest? {
@@ -75,16 +79,22 @@ private enum Endpoint {
         request.httpBody = try! JSONEncoder().encode(CheckoutsRequest(email: email, amount: amount))
       }
     case .consumerCards:
-      return makeRequest("/v2/consumer_cards", sandbox: true)
+      return makeRequest("/v2/consumer_cards", apiPlus: true) { request in
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        // A failed encoding operation here would represent programmer error
+        // swiftlint:disable:next force_try
+        request.httpBody = try! JSONEncoder().encode(ConsumerCardRequest.mock())
+      }
     }
   }
 
   private func makeRequest(
     _ path: String,
-    sandbox: Bool = false,
+    apiPlus: Bool = false,
     configure: ((inout URLRequest) -> Void)? = nil
   ) -> URLRequest? {
-    let baseUrl = sandbox ? URL(string: "http://api-plus.us-sandbox.afterpay.com") : URL(string: "http://\(Settings.host):\(Settings.port)")
+    let baseUrl = apiPlus ? URL(string: "http://api-plus.us-sandbox.afterpay.com") : URL(string: "http://\(Settings.host):\(Settings.port)")
     var urlComponents = baseUrl.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }
     urlComponents?.path = path
 

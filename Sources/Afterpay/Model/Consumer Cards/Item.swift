@@ -16,4 +16,8 @@ public struct Item: Encodable {
   let imageUrl: URL?
   let price: Money
   let categories: [[String]]?
+
+  static func mock() -> Item {
+    return Item(name: "Apple", sku: "Apple123", quantity: 1, pageUrl: URL(string: "https://www.apple.com/")!, imageUrl: nil, price: Money.mock(), categories: nil)
+  }
 }

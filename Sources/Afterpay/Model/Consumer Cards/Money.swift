@@ -13,7 +13,7 @@ public struct Money: Encodable {
   let currency: String
 
   public static func mock() -> Self {
-    return Money(amount: "23.00", currency: "AUD")
+    return Money(amount: "35.00", currency: "USD")
   }
 }
 

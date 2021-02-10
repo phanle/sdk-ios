@@ -17,6 +17,11 @@ final class PurchaseLogicController {
     _ completion: @escaping (Result<URL, Error>) -> Void
   ) -> Void
 
+  typealias ConsumerCardsURLProvider = (
+    _ payload: ConsumerCardRequest,
+    _ completion: @escaping (Result<URL, Error>) -> Void
+  ) -> Void
+
   enum Command {
     case updateProducts([ProductDisplay])
     case showCart(CartDisplay)
@@ -30,9 +35,10 @@ final class PurchaseLogicController {
     didSet { commandHandler(.updateProducts(productDisplayModels)) }
   }
 
-  private let checkoutURLProvider: CheckoutURLProvider
+  private let consumerCardsURLProvider: ConsumerCardsURLProvider
   private let products: [Product]
   private let email: String
+  private let payload: ConsumerCardRequest
   private let currencyCode: String
 
   private var quantities: [UUID: UInt] = [:]
@@ -49,15 +55,17 @@ final class PurchaseLogicController {
   }
 
   init(
-    checkoutURLProvider: @escaping CheckoutURLProvider,
+    consumerCardsURLProvider: @escaping ConsumerCardsURLProvider,
     products: [Product] = .stub,
     email: String,
+    payload: ConsumerCardRequest,
     currencyCode: String
   ) {
-    self.checkoutURLProvider = checkoutURLProvider
+    self.consumerCardsURLProvider = consumerCardsURLProvider
     self.products = products
     self.email = email
     self.currencyCode = currencyCode
+    self.payload = payload
   }
 
   func incrementQuantityOfProduct(with id: UUID) {
@@ -79,17 +87,28 @@ final class PurchaseLogicController {
   }
 
   func payWithAfterpay() {
-    let formatter = CurrencyFormatter(currencyCode: currencyCode)
-    let amount = formatter.string(from: total)
+//    let formatter = CurrencyFormatter(currencyCode: currencyCode)
+//    let amount = formatter.string(from: total)
 
-    checkoutURLProvider(email, amount) { [commandHandler] result in
+//    checkoutURLProvider(email, amount) { [commandHandler] result in
+//      switch result {
+//      case .success(let url):
+//        commandHandler(.showAfterpayCheckout(url))
+//      case .failure(let error):
+//        commandHandler(.showAlertForCheckoutURLError(error))
+//      }
+//    }
+
+    consumerCardsURLProvider(payload) { [commandHandler] result in
       switch result {
       case .success(let url):
+        // redirect with url
         commandHandler(.showAfterpayCheckout(url))
       case .failure(let error):
-        commandHandler(.showAlertForCheckoutURLError(error))
+        commandHandler(.showAlertForErrorMessage(error.localizedDescription))
       }
     }
+
   }
 
   func success(with token: String) {

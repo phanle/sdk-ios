@@ -9,7 +9,11 @@
 import Foundation
 
 public struct Merchant: Encodable {
-  let redirectConfirmUrl: String
-  let redirectCancelUrl: String
+  let redirectConfirmUrl: URL
+  let redirectCancelUrl: URL
   let name: String?
+
+  static func mock() -> Merchant {
+    return Merchant(redirectConfirmUrl: URL(string: "https://www.apple.com/")!, redirectCancelUrl: URL(string: "https://www.apple.com/")!, name: "Apple")
+  }
 }
