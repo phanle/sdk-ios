@@ -28,6 +28,7 @@ final class NetworkService {
     urlRequest.httpMethod = endpoint.method.rawValue
 
     if endpoint.method == .post {
+      urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
       switch endpoint {
       case .consumerCards(let payload):
         do {

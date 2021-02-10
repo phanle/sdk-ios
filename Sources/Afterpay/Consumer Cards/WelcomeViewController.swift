@@ -104,7 +104,9 @@ final class WelcomeViewController: UIViewController {
     NetworkService.shared.request(endpoint: .consumerCards(payload)) { (result: Result<ConsumerCardResponse, Error>) in
       switch result {
       case .success(let response):
-        Afterpay.presentCheckoutModally(over: self, loading: response.redirectCheckoutUrl, completion: self.checkoutCompletion)
+        DispatchQueue.main.async {
+          Afterpay.presentCheckoutModally(over: self, loading: response.redirectCheckoutUrl, completion: self.checkoutCompletion)
+        }
       case .failure(let error):
         fatalError(error.localizedDescription)
       }
