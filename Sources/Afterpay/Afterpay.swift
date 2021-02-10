@@ -46,29 +46,11 @@ public func presentCheckoutModally(
 // swiftlint:disable:next function_parameter_count
 public func presentWelcomePageModally(
   over viewController: UIViewController,
-  aggregator: String,
-  billing: Contact?,
-  shipping: Contact,
-  items: [Item]?,
-  discounts: [Discount]?,
-  merchant: Merchant?,
-  merchantReference: String?,
-  taxAmount: Money,
-  shippingAmount: Money,
-  consumerEmail: String,
-  animated: Bool = true
+  payload: ConsumerCardRequest,
+  animated: Bool = true,
+  checkoutCompletion: @escaping (_ result: CheckoutResult) -> Void
 ) {
-  let viewControllerToPresent: UIViewController = WelcomeViewController(
-    aggregator: aggregator,
-    billing: billing,
-    shipping: shipping,
-    items: items,
-    discounts: discounts,
-    merchant: merchant,
-    merchantReference: merchantReference,
-    taxAmount: taxAmount,
-    shippingAmount: shippingAmount,
-    consumerEmail: consumerEmail)
+  let viewControllerToPresent: UIViewController = WelcomeViewController(with: payload, checkoutCompletion: checkoutCompletion)
 
   viewController.present(viewControllerToPresent, animated: animated, completion: nil)
 }

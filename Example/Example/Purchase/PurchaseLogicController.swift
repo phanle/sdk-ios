@@ -25,6 +25,7 @@ final class PurchaseLogicController {
   enum Command {
     case updateProducts([ProductDisplay])
     case showCart(CartDisplay)
+    case showAfterpayWelcome
     case showAfterpayCheckout(URL)
     case showAlertForCheckoutURLError(Error)
     case showAlertForErrorMessage(String)
@@ -36,6 +37,7 @@ final class PurchaseLogicController {
   }
 
   private let consumerCardsURLProvider: ConsumerCardsURLProvider
+  private let checkoutURLProvider: CheckoutURLProvider
   private let products: [Product]
   private let email: String
   private let payload: ConsumerCardRequest
@@ -56,12 +58,14 @@ final class PurchaseLogicController {
 
   init(
     consumerCardsURLProvider: @escaping ConsumerCardsURLProvider,
+    checkoutURLProvider: @escaping CheckoutURLProvider,
     products: [Product] = .stub,
     email: String,
     payload: ConsumerCardRequest,
     currencyCode: String
   ) {
     self.consumerCardsURLProvider = consumerCardsURLProvider
+    self.checkoutURLProvider = checkoutURLProvider
     self.products = products
     self.email = email
     self.currencyCode = currencyCode
@@ -87,28 +91,17 @@ final class PurchaseLogicController {
   }
 
   func payWithAfterpay() {
-//    let formatter = CurrencyFormatter(currencyCode: currencyCode)
-//    let amount = formatter.string(from: total)
+    let formatter = CurrencyFormatter(currencyCode: currencyCode)
+    let amount = formatter.string(from: total)
 
-//    checkoutURLProvider(email, amount) { [commandHandler] result in
-//      switch result {
-//      case .success(let url):
-//        commandHandler(.showAfterpayCheckout(url))
-//      case .failure(let error):
-//        commandHandler(.showAlertForCheckoutURLError(error))
-//      }
-//    }
-
-    consumerCardsURLProvider(payload) { [commandHandler] result in
+    checkoutURLProvider(email, amount) { [commandHandler] result in
       switch result {
       case .success(let url):
-        // redirect with url
         commandHandler(.showAfterpayCheckout(url))
       case .failure(let error):
-        commandHandler(.showAlertForErrorMessage(error.localizedDescription))
+        commandHandler(.showAlertForCheckoutURLError(error))
       }
     }
-
   }
 
   func success(with token: String) {

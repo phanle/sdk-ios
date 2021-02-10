@@ -22,63 +22,29 @@ final class WelcomeViewController: UIViewController {
     }
   }
 
-  // To be filled by merchant
-  private let aggregator: String
-  private let billing: Contact?
-  private let shipping: Contact
-  private let items: [Item]?
-  private let discounts: [Discount]?
-  private let merchant: Merchant?
-  private let merchantReference: String?
-  private let taxAmount: Money
-  private let shippingAmount: Money
+  // Payload for consumer cards API request
+  private var consumerCardRequest: ConsumerCardRequest
 
-  // To be filled by users
-  private var consumer: Consumer
-  private var amount: Money // Use tax/shipping currency
+  private let checkoutCompletion: (_ result: CheckoutResult) -> Void
 
-  // list of all views
   private let welcomeView: WelcomeView
   private let enterAmountView: EnterAmountView
 
   init(
-    aggregator: String,
-    billing: Contact?,
-    shipping: Contact,
-    items: [Item]?,
-    discounts: [Discount]?,
-    merchant: Merchant?,
-    merchantReference: String?,
-    taxAmount: Money,
-    shippingAmount: Money,
-    consumerEmail: String
+    with payload: ConsumerCardRequest,
+    checkoutCompletion: @escaping (_ result: CheckoutResult) -> Void
   ) {
-    // Validate parameters value here
+    // Validate parameters value
 
-    // Assign parameters
-    self.aggregator = aggregator
-    self.billing = billing
-    self.shipping = shipping
-    self.items = items
-    self.discounts = discounts
-    self.merchant = merchant
-    self.merchantReference = merchantReference
-    self.taxAmount = taxAmount
-    self.shippingAmount = shippingAmount
-
-    self.amount = Money(amount: "0.00", currency: taxAmount.currency)
-    self.consumer = Consumer(phoneNumber: nil, givenNames: nil, surname: nil, email: consumerEmail)
+    self.consumerCardRequest = payload
 
     // initiate views
-    welcomeView = WelcomeView(continueAction: #selector(updateView))
-    enterAmountView = EnterAmountView(continueAction: #selector(updateView))
+    welcomeView = WelcomeView(continueAction: #selector(continueButtonAction))
+    enterAmountView = EnterAmountView(continueAction: #selector(continueButtonAction))
+
+    self.checkoutCompletion = checkoutCompletion
 
     super.init(nibName: nil, bundle: nil)
-
-    // update amount when there are items
-    if let items = items {
-      self.amount = getTotalAmount(with: items, currency: taxAmount.currency)
-    }
   }
 
   required init?(coder: NSCoder) {
@@ -115,32 +81,35 @@ final class WelcomeViewController: UIViewController {
     reloadView()
   }
 
-  @objc func updateView() {
+  @objc func continueButtonAction() {
     switch currentScreen {
     case .welcome:
-      enterAmountView.amountField.text = amount.amount
+      enterAmountView.amountField.text = consumerCardRequest.amount.amount
       currentScreen = .amount
     case .amount:
       let amountValue = enterAmountView.amountField.text ?? "0.00"
 
-      amount = Money(amount: amountValue, currency: taxAmount.currency)
-      // perform checkout here
-      dismiss(animated: true, completion: nil)
+      consumerCardRequest.amount = Money(amount: amountValue, currency: consumerCardRequest.amount.currency)
+      // call consumer card api
+      do {
+        try callConsumerCardAPI(payload: consumerCardRequest)
+      } catch {
+        fatalError("\(error.localizedDescription)")
+      }
     }
   }
 
-  // Use configuration currency code instead!
-  private func getTotalAmount(with items: [Item]?, currency: String) -> Money {
-    guard let items = items else {
-      return Money(amount: "0.00", currency: currency)
+  // Move this func away from view controller
+  private func callConsumerCardAPI(payload: ConsumerCardRequest) throws {
+    NetworkService.shared.request(endpoint: .consumerCards(payload)) { (result: Result<ConsumerCardResponse, Error>) in
+      switch result {
+      case .success(let response):
+        Afterpay.presentCheckoutModally(over: self, loading: response.redirectCheckoutUrl, completion: self.checkoutCompletion)
+      case .failure(let error):
+        fatalError(error.localizedDescription)
+      }
     }
-
-    let totalAmount = items
-      .map { item in Decimal(item.quantity) * Decimal(string: item.price.amount)!}
-      .reduce(0, +)
-
-    // Use CurrencyFormatter instead
-    return Money(amount: "\(totalAmount)", currency: currency)
+//          Afterpay.presentCheckoutModally(over: self?, loading: response.redirectCheckoutUrl, completion: self?.checkoutCompletion)
   }
 
   private func updateLayout(with subview: UIView) {

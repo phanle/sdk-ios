@@ -58,29 +58,22 @@ final class PurchaseFlowController: UIViewController {
       productsViewController.update(products: products)
 
     case .showCart(let cart):
-      let cartViewController = CartViewController(cart: cart) { event in
+      let cartViewController = CartViewController(cart: cart) { [weak self] event in
         switch event {
         case .didTapPay:
-          logicController.payWithAfterpay()
+//          logicController.payWithAfterpay()
+          self?.execute(command: .showAfterpayWelcome)
         }
       }
 
       navigationController.pushViewController(cartViewController, animated: true)
 
-    case .showAfterpayCheckout(let url):
-      Afterpay.presentWelcomePageModally(over: self.ownedNavigationController,
-                                         aggregator: "deadbeef",
-                                         billing: Contact.mock(), shipping: Contact.mock(),
-                                         items: nil,
-                                         discounts: nil,
-                                         merchant: nil,
-                                         merchantReference: nil,
-                                         taxAmount: Money.mock(),
-                                         shippingAmount: Money.mock(),
-                                         consumerEmail: "test@afterpay.com")
+    case .showAfterpayWelcome:
+          presentAfterpayWelcomeModally()
+    return
 
-    // Uncomment this to launch checkout modal
-    //      presentAfterpayCheckoutModally(loading: url, language: Settings.language)
+    case .showAfterpayCheckout(let url):
+          presentAfterpayCheckoutModally(loading: url, language: Settings.language)
 
     case .showAlertForCheckoutURLError(let error):
       let alert = AlertFactory.alert(for: error)
@@ -94,6 +87,20 @@ final class PurchaseFlowController: UIViewController {
       let messageViewController = MessageViewController(message: message)
       let viewControllers = [productsViewController, messageViewController]
       navigationController.setViewControllers(viewControllers, animated: true)
+    }
+  }
+
+  private func presentAfterpayWelcomeModally() {
+    let logicController = self.logicController
+    let viewController = self.ownedNavigationController
+
+    Afterpay.presentWelcomePageModally(over: viewController, payload: ConsumerCardRequest.mock()) { result in
+        switch result {
+        case .success(let token):
+          logicController.success(with: token)
+        case .cancelled(let reason):
+          logicController.cancelled(with: reason)
+      }
     }
   }
 

@@ -10,7 +10,7 @@ import Foundation
 
 public struct ConsumerCardRequest: Encodable {
   let aggregator: String
-  let amount: Money
+  var amount: Money
   let consumer: Consumer
   let billing: Contact?
   let shipping: Contact
@@ -35,14 +35,6 @@ public struct ConsumerCardRequest: Encodable {
       taxAmount: nil,
       shippingAmount: nil
     )
-  }
-
-  public func jsonString() throws -> String? {
-    let jsonEncoder = JSONEncoder()
-    let jsonData = try jsonEncoder.encode(self)
-    let json = String(data: jsonData, encoding: String.Encoding.utf8)
-
-    return json
   }
 }
 

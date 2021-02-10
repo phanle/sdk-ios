@@ -41,6 +41,7 @@
 		DDBD9C0825D33C5D00008642 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD9C0725D33C5D00008642 /* Contact.swift */; };
 		DDBD9C0C25D33C7000008642 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD9C0B25D33C7000008642 /* Item.swift */; };
 		DDBD9C1025D33CB000008642 /* Merchant.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD9C0F25D33CB000008642 /* Merchant.swift */; };
+		DDBD9C1F25D3B4F500008642 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD9C1E25D3B4F500008642 /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +102,7 @@
 		DDBD9C0725D33C5D00008642 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		DDBD9C0B25D33C7000008642 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		DDBD9C0F25D33CB000008642 /* Merchant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Merchant.swift; sourceTree = "<group>"; };
+		DDBD9C1E25D3B4F500008642 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +224,7 @@
 				946388FB24DD05D400A1227A /* Checkout */,
 				946388FC24DD075400A1227A /* Info */,
 				6691776D24E0CB7C00D0A4B2 /* Model */,
+				DDBD9C1D25D3B32C00008642 /* Network */,
 				66E255AC24E3BA2000C81F20 /* Resources */,
 				661B233024DA87EA0010EBCD /* Views */,
 				663F96AA24DA906800B0643A /* Wrappers */,
@@ -307,6 +310,14 @@
 				DD70770925D2171C00401BDB /* ConsumerCardBody.swift */,
 			);
 			path = "Consumer Cards";
+			sourceTree = "<group>";
+		};
+		DDBD9C1D25D3B32C00008642 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				DDBD9C1E25D3B4F500008642 /* NetworkService.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -489,6 +500,7 @@
 				15F7DDB725393BD30011EC25 /* CurrencyFormatter.swift in Sources */,
 				66DAAC8B24E0CF0100127460 /* PriceBreakdown.swift in Sources */,
 				661CFDB62570E7F000D8A1E8 /* PaymentButton.swift in Sources */,
+				DDBD9C1F25D3B4F500008642 /* NetworkService.swift in Sources */,
 				662A3AED24A999A500EFD826 /* CheckoutResult.swift in Sources */,
 				667AD3542497121200BF94E5 /* CheckoutWebViewController.swift in Sources */,
 				66F9767C2499A11A001D38FA /* Afterpay.swift in Sources */,
