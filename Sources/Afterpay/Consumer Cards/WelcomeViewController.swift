@@ -105,7 +105,12 @@ final class WelcomeViewController: UIViewController {
       switch result {
       case .success(let response):
         DispatchQueue.main.async {
-          Afterpay.presentCheckoutModally(over: self, loading: response.redirectCheckoutUrl, completion: self.checkoutCompletion)
+          var viewControllerToPresent: UIViewController = CheckoutWebViewController(
+            checkoutUrl: response.redirectCheckoutUrl,
+            completion: self.checkoutCompletion
+          )
+
+          self.navigationController?.show(viewControllerToPresent, sender: self)
         }
       case .failure(let error):
         fatalError(error.localizedDescription)

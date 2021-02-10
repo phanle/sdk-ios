@@ -52,7 +52,9 @@ public func presentWelcomePageModally(
 ) {
   let viewControllerToPresent: UIViewController = WelcomeViewController(with: payload, checkoutCompletion: checkoutCompletion)
 
-  viewController.present(viewControllerToPresent, animated: animated, completion: nil)
+  let containerController = UINavigationController(rootViewController: viewControllerToPresent)
+
+  viewController.present(containerController, animated: animated, completion: nil)
 }
 
 // MARK: - Authentication
