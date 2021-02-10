@@ -53,6 +53,7 @@ public func presentWelcomePageModally(
   let viewControllerToPresent: UIViewController = WelcomeViewController(with: payload, checkoutCompletion: checkoutCompletion)
 
   let containerController = UINavigationController(rootViewController: viewControllerToPresent)
+  containerController.setNavigationBarHidden(true, animated: false)
 
   viewController.present(containerController, animated: animated, completion: nil)
 }
