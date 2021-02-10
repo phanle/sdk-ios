@@ -111,7 +111,6 @@ final class WelcomeViewController: UIViewController {
         fatalError(error.localizedDescription)
       }
     }
-//          Afterpay.presentCheckoutModally(over: self?, loading: response.redirectCheckoutUrl, completion: self?.checkoutCompletion)
   }
 
   private func updateLayout(with subview: UIView) {

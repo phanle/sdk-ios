@@ -17,11 +17,6 @@ final class PurchaseLogicController {
     _ completion: @escaping (Result<URL, Error>) -> Void
   ) -> Void
 
-  typealias ConsumerCardsURLProvider = (
-    _ payload: ConsumerCardRequest,
-    _ completion: @escaping (Result<URL, Error>) -> Void
-  ) -> Void
-
   enum Command {
     case updateProducts([ProductDisplay])
     case showCart(CartDisplay)
@@ -36,7 +31,6 @@ final class PurchaseLogicController {
     didSet { commandHandler(.updateProducts(productDisplayModels)) }
   }
 
-  private let consumerCardsURLProvider: ConsumerCardsURLProvider
   private let checkoutURLProvider: CheckoutURLProvider
   private let products: [Product]
   private let email: String
@@ -57,14 +51,12 @@ final class PurchaseLogicController {
   }
 
   init(
-    consumerCardsURLProvider: @escaping ConsumerCardsURLProvider,
     checkoutURLProvider: @escaping CheckoutURLProvider,
     products: [Product] = .stub,
     email: String,
     payload: ConsumerCardRequest,
     currencyCode: String
   ) {
-    self.consumerCardsURLProvider = consumerCardsURLProvider
     self.checkoutURLProvider = checkoutURLProvider
     self.products = products
     self.email = email

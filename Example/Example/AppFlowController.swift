@@ -18,7 +18,6 @@ final class AppFlowController: UIViewController {
     super.init(nibName: nil, bundle: nil)
 
     let purchaseLogicController = PurchaseLogicController(
-      consumerCardsURLProvider: Repository.shared.consumerCard(payload:completion:),
       checkoutURLProvider: Repository.shared.checkout(email:amount:completion:),
       email: Settings.email,
       payload: ConsumerCardRequest.mock(),

@@ -40,22 +40,6 @@ final class Repository {
     }
   }
 
-  func consumerCard(
-    payload: ConsumerCardRequest,
-    completion: @escaping (Result<URL, Error>) -> Void
-  ) {
-    apiClient.consumerCards(payload) { result in
-      completion(result.flatMap { data in
-        do {
-          let response = try JSONDecoder().decode(ConsumerCardResponse.self, from: data)
-          return .success(response.redirectCheckoutUrl)
-        } catch {
-          return .failure(error)
-        }
-      })
-    }
-  }
-
   func fetchConfiguration(completion: @escaping (Result<Configuration, Error>) -> Void) {
     getConfigurationData { result in
       completion(result.flatMap { data in
