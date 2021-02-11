@@ -48,9 +48,9 @@ public func presentWelcomePageModally(
   over viewController: UIViewController,
   payload: ConsumerCardRequest,
   animated: Bool = true,
-  checkoutCompletion: @escaping (_ result: CheckoutResult) -> Void
+  checkoutCompletion: @escaping (_ result: ConsumerCardCheckoutResult) -> Void
 ) {
-  let viewControllerToPresent: UIViewController = WelcomeViewController(with: payload, checkoutCompletion: checkoutCompletion)
+  let viewControllerToPresent: UIViewController = ConsumerCardFlowViewController(with: payload, checkoutCompletion: checkoutCompletion)
 
   let containerController = UINavigationController(rootViewController: viewControllerToPresent)
   containerController.setNavigationBarHidden(true, animated: false)

@@ -14,7 +14,6 @@
 		661CFDB62570E7F000D8A1E8 /* PaymentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661CFDB52570E7F000D8A1E8 /* PaymentButton.swift */; };
 		662A3AED24A999A500EFD826 /* CheckoutResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662A3AEC24A999A500EFD826 /* CheckoutResult.swift */; };
 		6635B95F24CAA9F000EBB3A6 /* ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6635B95E24CAA9F000EBB3A6 /* ConfigurationTests.swift */; };
-		6640C15224D8E1A700F7F4CC /* Macaw in Frameworks */ = {isa = PBXBuildFile; productRef = 6640C15124D8E1A700F7F4CC /* Macaw */; };
 		6640C15724D9211800F7F4CC /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6640C15624D9211800F7F4CC /* SwiftUI.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		66483F3B24D7A164000BE6B5 /* PriceBreakdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66483F3A24D7A164000BE6B5 /* PriceBreakdownView.swift */; };
 		665FC57C2488766C00A5A93E /* Afterpay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 668F16072487653A0040345C /* Afterpay.framework */; };
@@ -32,12 +31,13 @@
 		66EE9BD724DCEC3E00A81C19 /* LinkTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66EE9BD624DCEC3D00A81C19 /* LinkTextView.swift */; };
 		66F9767C2499A11A001D38FA /* Afterpay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F9767B2499A11A001D38FA /* Afterpay.swift */; };
 		946388FE24DD077F00A1227A /* InfoWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946388FD24DD077F00A1227A /* InfoWebViewController.swift */; };
+		DBBB8D074F1DE5A57C429316 /* ConsumerCardCheckoutResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBBB85C0A5E2C784A538CD60 /* ConsumerCardCheckoutResult.swift */; };
 		DD0C331A25D4E88C00B7496D /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0C331925D4E88C00B7496D /* EndPoint.swift */; };
 		DD0C331E25D4EAD500B7496D /* ConsumerCardConfirm.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0C331D25D4EAD500B7496D /* ConsumerCardConfirm.swift */; };
 		DD18F41E25D5E1CD00E345C9 /* ConsumerCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD18F41D25D5E1CD00E345C9 /* ConsumerCardView.swift */; };
 		DD18F42425D5E46700E345C9 /* ConsumerCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD18F42325D5E46700E345C9 /* ConsumerCardViewController.swift */; };
 		DD70770A25D2171C00401BDB /* ConsumerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70770925D2171C00401BDB /* ConsumerCard.swift */; };
-		DD70771725D223F400401BDB /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70771625D223F400401BDB /* WelcomeViewController.swift */; };
+		DD70771725D223F400401BDB /* ConsumerCardFlowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70771625D223F400401BDB /* ConsumerCardFlowViewController.swift */; };
 		DD70771D25D2361900401BDB /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70771C25D2361900401BDB /* WelcomeView.swift */; };
 		DD70772125D2396F00401BDB /* EnterAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70772025D2396F00401BDB /* EnterAmountView.swift */; };
 		DDBD9BFD25D33BFE00008642 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDBD9BFC25D33BFE00008642 /* Money.swift */; };
@@ -97,12 +97,13 @@
 		66EE9BD624DCEC3D00A81C19 /* LinkTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkTextView.swift; sourceTree = "<group>"; };
 		66F9767B2499A11A001D38FA /* Afterpay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Afterpay.swift; sourceTree = "<group>"; };
 		946388FD24DD077F00A1227A /* InfoWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWebViewController.swift; sourceTree = "<group>"; };
+		DBBB85C0A5E2C784A538CD60 /* ConsumerCardCheckoutResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsumerCardCheckoutResult.swift; sourceTree = "<group>"; };
 		DD0C331925D4E88C00B7496D /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		DD0C331D25D4EAD500B7496D /* ConsumerCardConfirm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCardConfirm.swift; sourceTree = "<group>"; };
 		DD18F41D25D5E1CD00E345C9 /* ConsumerCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCardView.swift; sourceTree = "<group>"; };
 		DD18F42325D5E46700E345C9 /* ConsumerCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCardViewController.swift; sourceTree = "<group>"; };
 		DD70770925D2171C00401BDB /* ConsumerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCard.swift; sourceTree = "<group>"; };
-		DD70771625D223F400401BDB /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		DD70771625D223F400401BDB /* ConsumerCardFlowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCardFlowViewController.swift; sourceTree = "<group>"; };
 		DD70771C25D2361900401BDB /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		DD70772025D2396F00401BDB /* EnterAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterAmountView.swift; sourceTree = "<group>"; };
 		DDBD9BFC25D33BFE00008642 /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
@@ -126,7 +127,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6640C15224D8E1A700F7F4CC /* Macaw in Frameworks */,
 				6640C15724D9211800F7F4CC /* SwiftUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,11 +300,12 @@
 		DD70771525D21EE000401BDB /* Consumer Cards */ = {
 			isa = PBXGroup;
 			children = (
-				DD70771625D223F400401BDB /* WelcomeViewController.swift */,
+				DD70771625D223F400401BDB /* ConsumerCardFlowViewController.swift */,
 				DD70771C25D2361900401BDB /* WelcomeView.swift */,
 				DD70772025D2396F00401BDB /* EnterAmountView.swift */,
 				DD18F41D25D5E1CD00E345C9 /* ConsumerCardView.swift */,
 				DD18F42325D5E46700E345C9 /* ConsumerCardViewController.swift */,
+				DBBB85C0A5E2C784A538CD60 /* ConsumerCardCheckoutResult.swift */,
 			);
 			path = "Consumer Cards";
 			sourceTree = "<group>";
@@ -380,7 +381,7 @@
 			);
 			name = Afterpay;
 			packageProductDependencies = (
-				6640C15124D8E1A700F7F4CC /* Macaw */,
+				6640C15124D8E1A700F7F4CC,
 			);
 			productName = Afterpay;
 			productReference = 668F16072487653A0040345C /* Afterpay.framework */;
@@ -415,7 +416,7 @@
 			);
 			mainGroup = 668F15FD2487653A0040345C;
 			packageReferences = (
-				6640C15024D8E1A700F7F4CC /* XCRemoteSwiftPackageReference "Macaw" */,
+				6640C15024D8E1A700F7F4CC,
 			);
 			productRefGroup = 668F16082487653A0040345C /* Products */;
 			projectDirPath = "";
@@ -508,7 +509,7 @@
 				DD0C331E25D4EAD500B7496D /* ConsumerCardConfirm.swift in Sources */,
 				6602EF0F25358A8000A0468C /* ColorScheme.swift in Sources */,
 				6672982A25357D80001D1C5A /* SVGConfiguration.swift in Sources */,
-				DD70771725D223F400401BDB /* WelcomeViewController.swift in Sources */,
+				DD70771725D223F400401BDB /* ConsumerCardFlowViewController.swift in Sources */,
 				6689536C24C96CB5005090B4 /* Configuration.swift in Sources */,
 				DD18F41E25D5E1CD00E345C9 /* ConsumerCardView.swift in Sources */,
 				15F7DDB725393BD30011EC25 /* CurrencyFormatter.swift in Sources */,
@@ -531,6 +532,7 @@
 				DD70772125D2396F00401BDB /* EnterAmountView.swift in Sources */,
 				66EE9BD724DCEC3E00A81C19 /* LinkTextView.swift in Sources */,
 				6605666324E5199500DA588E /* Locales.swift in Sources */,
+				DBBB8D074F1DE5A57C429316 /* ConsumerCardCheckoutResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,7 +622,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6640C15024D8E1A700F7F4CC /* XCRemoteSwiftPackageReference "Macaw" */ = {
+		6640C15024D8E1A700F7F4CC = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/Macaw";
 			requirement = {
@@ -631,9 +633,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6640C15124D8E1A700F7F4CC /* Macaw */ = {
+		6640C15124D8E1A700F7F4CC = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6640C15024D8E1A700F7F4CC /* XCRemoteSwiftPackageReference "Macaw" */;
+			package = 6640C15024D8E1A700F7F4CC;
 			productName = Macaw;
 		};
 /* End XCSwiftPackageProductDependency section */

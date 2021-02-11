@@ -1,5 +1,5 @@
 //
-//  WelcomeViewController.swift
+//  ConsumerCardFlowViewController.swift
 //  Afterpay
 //
 //  Created by Nabila Herzegovina on 9/2/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class WelcomeViewController: UIViewController {
+final class ConsumerCardFlowViewController: UIViewController {
 
   enum Screen {
     case welcome
@@ -25,7 +25,7 @@ final class WelcomeViewController: UIViewController {
   // Payload for consumer cards API request
   private var consumerCardRequest: ConsumerCardRequest
 
-  private let checkoutCompletion: (_ result: CheckoutResult) -> Void
+  private let checkoutCompletion: (_ result: ConsumerCardCheckoutResult) -> Void
 
   private let welcomeView: WelcomeView
   private let enterAmountView: EnterAmountView
@@ -35,7 +35,7 @@ final class WelcomeViewController: UIViewController {
 
   init(
     with payload: ConsumerCardRequest,
-    checkoutCompletion: @escaping (_ result: CheckoutResult) -> Void
+    checkoutCompletion: @escaping (_ result: ConsumerCardCheckoutResult) -> Void
   ) {
     // Validate parameters value
 
@@ -139,7 +139,14 @@ final class WelcomeViewController: UIViewController {
           let viewControllerToPresent: UIViewController = CheckoutWebViewController(
             checkoutUrl: response.redirectCheckoutUrl,
             cookieChangeCallback: self.cookieChangeCallback(authToken:),
-            completion: self.checkoutCompletion
+            completion: { result in
+              switch result {
+              case .success(let token):
+                print("need to call confirm")
+              case .cancelled(let reason):
+                print("Need to handle cancelled")
+              }
+            }
           )
 
           self.navigationController?.show(viewControllerToPresent, sender: self)

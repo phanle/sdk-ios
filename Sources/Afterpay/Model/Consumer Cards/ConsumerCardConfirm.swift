@@ -20,7 +20,7 @@ struct PaymentDetails: Decodable {
   let virtualCard: VirtualCard
 }
 
-struct VirtualCard: Decodable {
+public struct VirtualCard: Decodable {
   let cardType: String
   let cardNumber: String
   let cvc: String

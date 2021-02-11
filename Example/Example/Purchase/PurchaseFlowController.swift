@@ -97,10 +97,10 @@ final class PurchaseFlowController: UIViewController {
 
     Afterpay.presentWelcomePageModally(over: viewController, payload: ConsumerCardRequest.mock()) { result in
         switch result {
-        case .success(let token):
-          logicController.success(with: token)
-        case .cancelled(let reason):
-          logicController.cancelled(with: reason)
+        case .success(let virtualCard):
+          print(virtualCard)
+        default:
+          return
       }
     }
   }
