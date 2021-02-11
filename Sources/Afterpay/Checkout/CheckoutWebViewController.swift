@@ -13,7 +13,8 @@ import WebKit
 final class CheckoutWebViewController:
   UIViewController,
   UIAdaptivePresentationControllerDelegate,
-  WKNavigationDelegate
+  WKNavigationDelegate,
+  WKHTTPCookieStoreObserver
 { // swiftlint:disable:this opening_brace
 
   private static let bundle = Bundle(for: CheckoutWebViewController.self)
@@ -42,7 +43,10 @@ final class CheckoutWebViewController:
   }
 
   override func loadView() {
-    view = WKWebView()
+    let configuration = WKWebViewConfiguration()
+    configuration.websiteDataStore.httpCookieStore.add(self)
+
+    view = WKWebView(frame: .zero, configuration: configuration)
   }
 
   override func viewDidLoad() {
@@ -204,6 +208,16 @@ final class CheckoutWebViewController:
 
     if handled == false {
       completionHandler(.performDefaultHandling, nil)
+    }
+  }
+
+  // MARK: WKHTTPCookieStoreObserver
+
+  func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
+    cookieStore.getAllCookies { cookies in
+      let authCookie = cookies.filter { ($0.name == "pl_status" && $0.domain == "portalapi.us-sandbox.afterpay.com") }
+      // TODO: Use the token below for online card API
+      print("token: \(authCookie)")
     }
   }
 

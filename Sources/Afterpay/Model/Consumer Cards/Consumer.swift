@@ -15,6 +15,6 @@ public struct Consumer: Encodable {
   let email: String
 
   static func mock() -> Consumer {
-    return Consumer(phoneNumber: "1234", givenNames: "John", surname: "Doe", email: "test@afterpay.com")
+    return Consumer(phoneNumber: "917-653-8956", givenNames: "John", surname: "Doe", email: "test@afterpay.com")
   }
 }
