@@ -1,5 +1,5 @@
 //
-//  ConsumerCardPayload.swift
+//  ConsumerCard.swift
 //  Afterpay
 //
 //  Created by Nabila Herzegovina on 9/2/21.

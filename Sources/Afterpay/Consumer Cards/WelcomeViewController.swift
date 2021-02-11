@@ -105,7 +105,7 @@ final class WelcomeViewController: UIViewController {
       switch result {
       case .success(let response):
         DispatchQueue.main.async {
-          var viewControllerToPresent: UIViewController = CheckoutWebViewController(
+          let viewControllerToPresent: UIViewController = CheckoutWebViewController(
             checkoutUrl: response.redirectCheckoutUrl,
             completion: self.checkoutCompletion
           )

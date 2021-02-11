@@ -8,6 +8,11 @@
 
 import Foundation
 
+// TODO: Implement more network request error
+enum DecodeError: Error {
+  case unknown
+}
+
 final class NetworkService {
 
   private let session = URLSession(configuration: .default)
@@ -51,38 +56,5 @@ final class NetworkService {
         completion(.failure(error))
       }
     }.resume()
-  }
-}
-
-enum DecodeError: Error {
-  case unknown
-}
-
-enum RequestMethod: String {
-  case get = "GET"
-  case post = "POST"
-}
-
-enum Endpoint {
-  case consumerCards(ConsumerCardRequest)
-}
-
-extension Endpoint {
-  var baseURL: String {
-    return "https://api-plus.us-sandbox.afterpay.com"
-  }
-
-  var path: String {
-    switch self {
-    case .consumerCards:
-      return "/v2/consumer_cards"
-    }
-  }
-
-  var method: RequestMethod {
-    switch self {
-    case .consumerCards:
-      return .post
-    }
   }
 }
