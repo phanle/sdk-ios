@@ -30,6 +30,9 @@ final class WelcomeViewController: UIViewController {
   private let welcomeView: WelcomeView
   private let enterAmountView: EnterAmountView
 
+  private var consumerCardToken: String
+  private var token: String
+
   init(
     with payload: ConsumerCardRequest,
     checkoutCompletion: @escaping (_ result: CheckoutResult) -> Void
@@ -43,6 +46,9 @@ final class WelcomeViewController: UIViewController {
     enterAmountView = EnterAmountView(continueAction: #selector(continueButtonAction))
 
     self.checkoutCompletion = checkoutCompletion
+
+    self.consumerCardToken = ""
+    self.token = ""
 
     super.init(nibName: nil, bundle: nil)
   }
@@ -99,14 +105,40 @@ final class WelcomeViewController: UIViewController {
     }
   }
 
+  // callback for cookie change
+  func cookieChangeCallback(authToken: String) {
+    // Create body request
+    let bodyRequest = ConsumerCardConfirmRequest(consumerCardToken: consumerCardToken,
+                                                token: token,
+                                                requestId: "",
+                                                xAuthToken: authToken,
+                                                aggregator: "deadbeef")
+
+    NetworkService.shared.request(endpoint: .consumerCardConfirm(bodyRequest)) { (result: Result<ConsumerCardConfirmResponse, Error>) in
+      switch result {
+      case .success(let response):
+        DispatchQueue.main.async {
+          let viewControllerToPresent: UIViewController = ConsumerCardViewController(cardNumber: response.paymentDetails.virtualCard.cardNumber)
+
+          self.navigationController?.show(viewControllerToPresent, sender: self)
+        }
+      case .failure(let error):
+        fatalError(error.localizedDescription)
+      }
+    }
+  }
+
   // Move this func away from view controller
   private func callConsumerCardAPI(payload: ConsumerCardRequest) throws {
     NetworkService.shared.request(endpoint: .consumerCards(payload)) { (result: Result<ConsumerCardResponse, Error>) in
       switch result {
       case .success(let response):
+        self.token = response.token
+        self.consumerCardToken = response.consumerCardToken
         DispatchQueue.main.async {
           let viewControllerToPresent: UIViewController = CheckoutWebViewController(
             checkoutUrl: response.redirectCheckoutUrl,
+            cookieChangeCallback: self.cookieChangeCallback(authToken:),
             completion: self.checkoutCompletion
           )
 

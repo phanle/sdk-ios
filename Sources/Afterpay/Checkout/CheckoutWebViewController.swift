@@ -30,14 +30,20 @@ final class CheckoutWebViewController:
 
   private var webView: WKWebView { view as! WKWebView }
 
+  private var token: String = ""
+
+  private let cookieChangeCallback: (_ token: String) -> Void
+
   // MARK: Initialization
 
   init(
     checkoutUrl: URL,
+    cookieChangeCallback: @escaping (_ token: String) -> Void = { _ in return },
     completion: @escaping (_ result: CheckoutResult) -> Void
   ) {
     self.checkoutUrl = checkoutUrl
     self.completion = completion
+    self.cookieChangeCallback = cookieChangeCallback
 
     super.init(nibName: nil, bundle: nil)
   }
@@ -89,6 +95,13 @@ final class CheckoutWebViewController:
     request.setValue(value, forHTTPHeaderField: "X-Afterpay-SDK")
 
     webView.load(request)
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    // get the latest token value that is not nil
+    // call cookie change callback
+
+    cookieChangeCallback(token)
   }
 
   // MARK: UIAdaptivePresentationControllerDelegate
@@ -214,10 +227,17 @@ final class CheckoutWebViewController:
   // MARK: WKHTTPCookieStoreObserver
 
   func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
-    cookieStore.getAllCookies { cookies in
+    cookieStore.getAllCookies { [weak self] cookies in
       let authCookie = cookies.first { ($0.name == "pl_status" && $0.domain == "portalapi.us-sandbox.afterpay.com") }
       // TODO: Use the token below for online card API
-      print("token: \(authCookie?.value)")
+      guard let cookie = authCookie else {
+        return
+      }
+
+      if !cookie.value.isEmpty {
+        self?.token = cookie.value
+        print("token: \(self?.token)")
+      }
     }
   }
 

@@ -87,6 +87,7 @@ final class PurchaseFlowController: UIViewController {
       let messageViewController = MessageViewController(message: message)
       let viewControllers = [productsViewController, messageViewController]
       navigationController.setViewControllers(viewControllers, animated: true)
+      // Set virtual card here?
     }
   }
 
