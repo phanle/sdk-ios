@@ -34,14 +34,7 @@ final class NetworkService {
 
     if endpoint.method == .post {
       urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      switch endpoint {
-      case .consumerCards(let payload):
-        do {
-          urlRequest.httpBody = try JSONEncoder().encode(payload)
-        } catch {
-          fatalError("Enable to encode \(payload)")
-        }
-      }
+      urlRequest.httpBody = getRequestBody(for: endpoint)
     }
 
     session.dataTask(with: urlRequest) { data, _, error in
@@ -56,5 +49,24 @@ final class NetworkService {
         completion(.failure(error))
       }
     }.resume()
+  }
+
+  // Encode
+
+  func encode<T>(_ payload: T) -> Data where T: Encodable {
+    do {
+      return try JSONEncoder().encode(payload)
+    } catch {
+      fatalError("Enable to encode")
+    }
+  }
+
+  func getRequestBody(for endpoint: Endpoint) -> Data {
+    switch endpoint {
+    case .consumerCardConfirm(let payload):
+      return encode(payload)
+    case .consumerCards(let payload):
+      return encode(payload)
+    }
   }
 }
