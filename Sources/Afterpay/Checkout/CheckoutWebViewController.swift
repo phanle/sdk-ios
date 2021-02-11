@@ -215,9 +215,9 @@ final class CheckoutWebViewController:
 
   func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
     cookieStore.getAllCookies { cookies in
-      let authCookie = cookies.filter { ($0.name == "pl_status" && $0.domain == "portalapi.us-sandbox.afterpay.com") }
+      let authCookie = cookies.first { ($0.name == "pl_status" && $0.domain == "portalapi.us-sandbox.afterpay.com") }
       // TODO: Use the token below for online card API
-      print("token: \(authCookie)")
+      print("token: \(authCookie?.value)")
     }
   }
 
