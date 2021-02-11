@@ -8,12 +8,12 @@
 
 import Foundation
 
-public struct Contact: Encodable {
+public struct Contact: Codable {
   var name: String
   var line1: String
   var area1: String?
-  var region: String
-  var postcode: String
+  var region: String?
+  var postcode: String?
   var countryCode: String
   var phoneNumber: String?
 

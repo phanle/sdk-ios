@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Consumer: Encodable {
+public struct Consumer: Codable {
   let phoneNumber: String?
   let givenNames: String?
   let surname: String?

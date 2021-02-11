@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Money: Encodable {
+public struct Money: Codable {
   let amount: String
   let currency: String
 
@@ -17,7 +17,7 @@ public struct Money: Encodable {
   }
 }
 
-public struct Discount: Encodable {
+public struct Discount: Codable {
   let displayName: String
   let amount: Money
 }

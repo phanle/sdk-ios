@@ -8,10 +8,10 @@
 
 import Foundation
 
-public struct Item: Encodable {
-  let name: String
+public struct Item: Codable {
+  let name: String?
   let sku: String
-  let quantity: Int
+  let quantity: Int?
   let pageUrl: URL
   let imageUrl: URL?
   let price: Money
