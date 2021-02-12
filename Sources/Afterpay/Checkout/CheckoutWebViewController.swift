@@ -190,6 +190,10 @@ final class CheckoutWebViewController:
     }
   }
 
+  func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    HTTPCookieStorage.shared.cookies?.forEach(HTTPCookieStorage.shared.deleteCookie)
+  }
+
   func webView(
     _ webView: WKWebView,
     didFailProvisionalNavigation navigation: WKNavigation!,
