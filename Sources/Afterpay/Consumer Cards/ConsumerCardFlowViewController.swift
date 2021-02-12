@@ -72,8 +72,19 @@ final class ConsumerCardFlowViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func reloadView() {
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    view.backgroundColor = .white
+
+    setupSubViews()
+
+    reloadView()
+  }
+
+  private func reloadView() {
     var subview: UIView
+
     switch currentScreen {
     case .welcome:
       subview = welcomeView
@@ -92,11 +103,7 @@ final class ConsumerCardFlowViewController: UIViewController {
     updateLayout(with: subview)
   }
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    view.backgroundColor = .white
-
+  private func setupSubViews() {
     welcomeView.backgroundColor = view.backgroundColor
     enterAmountView.backgroundColor = view.backgroundColor
     consumerCardView.backgroundColor  = view.backgroundColor
@@ -112,11 +119,18 @@ final class ConsumerCardFlowViewController: UIViewController {
     view.addSubview(enterAmountView)
     view.addSubview(consumerCardView)
     view.addSubview(loadingView)
-
-    reloadView()
   }
 
-  @objc func continueButtonAction() {
+  private func updateLayout(with subview: UIView) {
+    NSLayoutConstraint.activate([
+      subview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+      subview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+      subview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+      subview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+    ])
+  }
+
+  @objc private func continueButtonAction() {
     switch currentScreen {
     case .welcome:
       enterAmountView.amountField.text = consumerCardRequest.amount.amount
@@ -126,25 +140,38 @@ final class ConsumerCardFlowViewController: UIViewController {
 
       consumerCardRequest.amount = Money(amount: amountValue, currency: consumerCardRequest.amount.currency)
       currentScreen = .loading
-      // call consumer card api
+
       do {
         try callConsumerCardAPI(payload: consumerCardRequest)
       } catch {
         fatalError("\(error.localizedDescription)")
       }
+
     default:
       return
     }
   }
 
-  // callback for cookie change
-  func cookieChangeCallback(authToken: String) {
+  // MARK: - Callbacks
+
+  private func cookieChangeCallback(authToken: String) {
     if !authToken.isEmpty {
       self.authToken = authToken
     }
   }
 
-  // API Calls
+  private func checkoutCompletion(_ result: CheckoutResult) {
+    switch result {
+    case .success(let token):
+      self.callConsumerCardConfirmAPI(checkoutToken: token)
+
+    case .cancelled(let reason):
+      print("Need to handle cancelled. Error reason: \(reason)")
+    }
+  }
+
+  // MARK: - API Calls
+
   private func callConsumerCardConfirmAPI(checkoutToken: String) {
     let payload = ConsumerCardConfirmRequest(
       consumerCardToken: self.consumerCardToken,
@@ -171,7 +198,6 @@ final class ConsumerCardFlowViewController: UIViewController {
     self.navigationController?.presentationController?.delegate = .none
   }
 
-  // Move this func away from view controller
   private func callConsumerCardAPI(payload: ConsumerCardRequest) throws {
     NetworkService.shared.request(endpoint: .consumerCards(payload)) { [unowned self] (result: Result<ConsumerCardResponse, Error>) in
       switch result {
@@ -183,15 +209,7 @@ final class ConsumerCardFlowViewController: UIViewController {
             checkoutUrl: response.redirectCheckoutUrl,
             consumerCardFlow: true,
             cookieChangeCallback: self.cookieChangeCallback(authToken:),
-            completion: { result in
-              switch result {
-              case .success(let token):
-                self.callConsumerCardConfirmAPI(checkoutToken: token)
-                // need authToken
-              case .cancelled(let reason):
-                print("Need to handle cancelled. Error reason: \(reason)")
-              }
-            }
+            completion: checkoutCompletion(_:)
           )
 
           loadingView.stopAnimating()
@@ -201,14 +219,5 @@ final class ConsumerCardFlowViewController: UIViewController {
         fatalError(error.localizedDescription)
       }
     }
-  }
-
-  private func updateLayout(with subview: UIView) {
-    NSLayoutConstraint.activate([
-      subview.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-      subview.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-      subview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-      subview.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-    ])
   }
 }
