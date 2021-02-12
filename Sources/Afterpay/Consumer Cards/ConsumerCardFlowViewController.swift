@@ -14,6 +14,7 @@ final class ConsumerCardFlowViewController: UIViewController {
     case welcome
     case amount
     case consumerCard(cardNumber: String)
+    case loading
   }
 
   // View State
@@ -31,6 +32,7 @@ final class ConsumerCardFlowViewController: UIViewController {
   private let welcomeView: WelcomeView
   private let enterAmountView: EnterAmountView
   private let consumerCardView: ConsumerCardView
+  private let loadingView: UIActivityIndicatorView
 
   private var consumerCardToken: String
   private var token: String
@@ -48,6 +50,14 @@ final class ConsumerCardFlowViewController: UIViewController {
     welcomeView = WelcomeView(continueAction: #selector(continueButtonAction))
     enterAmountView = EnterAmountView(continueAction: #selector(continueButtonAction))
     consumerCardView = ConsumerCardView(cardNumber: "")
+    loadingView = UIActivityIndicatorView()
+    loadingView.hidesWhenStopped = false
+
+    if #available(iOS 13.0, *) {
+      loadingView.style = .large
+    } else {
+      loadingView.style = .whiteLarge
+    }
 
     self.checkoutCompletion = checkoutCompletion
 
@@ -70,8 +80,12 @@ final class ConsumerCardFlowViewController: UIViewController {
     case .amount:
       subview = enterAmountView
     case .consumerCard(let cardNumber):
+      loadingView.stopAnimating()
       consumerCardView.updateCardNumber(with: cardNumber)
       subview = consumerCardView
+    case .loading:
+      loadingView.startAnimating()
+      subview = loadingView
     }
 
     view.bringSubviewToFront(subview)
@@ -86,14 +100,18 @@ final class ConsumerCardFlowViewController: UIViewController {
     welcomeView.backgroundColor = view.backgroundColor
     enterAmountView.backgroundColor = view.backgroundColor
     consumerCardView.backgroundColor  = view.backgroundColor
+    loadingView.backgroundColor = view.backgroundColor
 
     welcomeView.translatesAutoresizingMaskIntoConstraints = false
     enterAmountView.translatesAutoresizingMaskIntoConstraints = false
     consumerCardView.translatesAutoresizingMaskIntoConstraints = false
 
+    loadingView.frame = view.frame
+
     view.addSubview(welcomeView)
     view.addSubview(enterAmountView)
     view.addSubview(consumerCardView)
+    view.addSubview(loadingView)
 
     reloadView()
   }
@@ -107,6 +125,7 @@ final class ConsumerCardFlowViewController: UIViewController {
       let amountValue = enterAmountView.amountField.text ?? "0.00"
 
       consumerCardRequest.amount = Money(amount: amountValue, currency: consumerCardRequest.amount.currency)
+      currentScreen = .loading
       // call consumer card api
       do {
         try callConsumerCardAPI(payload: consumerCardRequest)
@@ -122,7 +141,6 @@ final class ConsumerCardFlowViewController: UIViewController {
   func cookieChangeCallback(authToken: String) {
     if !authToken.isEmpty {
       self.authToken = authToken
-      print("token: \(self.authToken)")
     }
   }
 
@@ -136,18 +154,21 @@ final class ConsumerCardFlowViewController: UIViewController {
       aggregator: "deadbeef"
     )
 
+    loadingView.startAnimating()
+
     NetworkService.shared.request(endpoint: .consumerCardConfirm(payload)) { [unowned self] (result: Result<ConsumerCardConfirmResponse, Error>) in
       switch result {
       case .success(let response):
         DispatchQueue.main.async {
           self.currentScreen = .consumerCard(cardNumber: response.paymentDetails.virtualCard.cardNumber)
-          self.navigationController?.popToRootViewController(animated: true)
-          self.navigationController?.presentationController?.delegate = .none
         }
       case .failure(let error):
         fatalError(error.localizedDescription)
       }
     }
+
+    self.navigationController?.popToRootViewController(animated: true)
+    self.navigationController?.presentationController?.delegate = .none
   }
 
   // Move this func away from view controller
@@ -173,6 +194,7 @@ final class ConsumerCardFlowViewController: UIViewController {
             }
           )
 
+          loadingView.stopAnimating()
           self.navigationController?.show(viewControllerToPresent, sender: self)
         }
       case .failure(let error):
