@@ -136,7 +136,7 @@ final class ConsumerCardFlowViewController: UIViewController {
       aggregator: "deadbeef"
     )
 
-    NetworkService.shared.request(endpoint: .consumerCardConfirm(payload)) { (result: Result<ConsumerCardConfirmResponse, Error>) in
+    NetworkService.shared.request(endpoint: .consumerCardConfirm(payload)) { [unowned self] (result: Result<ConsumerCardConfirmResponse, Error>) in
       switch result {
       case .success(let response):
         DispatchQueue.main.async {
@@ -152,7 +152,7 @@ final class ConsumerCardFlowViewController: UIViewController {
 
   // Move this func away from view controller
   private func callConsumerCardAPI(payload: ConsumerCardRequest) throws {
-    NetworkService.shared.request(endpoint: .consumerCards(payload)) { (result: Result<ConsumerCardResponse, Error>) in
+    NetworkService.shared.request(endpoint: .consumerCards(payload)) { [unowned self] (result: Result<ConsumerCardResponse, Error>) in
       switch result {
       case .success(let response):
         self.consumerCardToken = response.consumerCardToken
