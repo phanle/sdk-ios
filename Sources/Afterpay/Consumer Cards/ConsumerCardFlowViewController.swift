@@ -32,6 +32,7 @@ final class ConsumerCardFlowViewController: UIViewController {
 
   private var consumerCardToken: String
   private var token: String
+  private var authToken: String
 
   init(
     with payload: ConsumerCardRequest,
@@ -49,6 +50,7 @@ final class ConsumerCardFlowViewController: UIViewController {
 
     self.consumerCardToken = ""
     self.token = ""
+    self.authToken = ""
 
     super.init(nibName: nil, bundle: nil)
   }
@@ -107,25 +109,8 @@ final class ConsumerCardFlowViewController: UIViewController {
 
   // callback for cookie change
   func cookieChangeCallback(authToken: String) {
-    // Create body request
-    let bodyRequest = ConsumerCardConfirmRequest(consumerCardToken: consumerCardToken,
-                                                token: token,
-                                                requestId: "",
-                                                xAuthToken: authToken,
-                                                aggregator: "deadbeef")
+    self.authToken = authToken
 
-    NetworkService.shared.request(endpoint: .consumerCardConfirm(bodyRequest)) { (result: Result<ConsumerCardConfirmResponse, Error>) in
-      switch result {
-      case .success(let response):
-        DispatchQueue.main.async {
-          let viewControllerToPresent: UIViewController = ConsumerCardViewController(cardNumber: response.paymentDetails.virtualCard.cardNumber)
-
-          self.navigationController?.show(viewControllerToPresent, sender: self)
-        }
-      case .failure(let error):
-        fatalError(error.localizedDescription)
-      }
-    }
   }
 
   // Move this func away from view controller
@@ -142,7 +127,24 @@ final class ConsumerCardFlowViewController: UIViewController {
             completion: { result in
               switch result {
               case .success(let token):
-                print("need to call confirm")
+                let bodyRequest = ConsumerCardConfirmRequest(consumerCardToken: self.consumerCardToken,
+                        token: token,
+                        requestId: "",
+                        xAuthToken: self.authToken,
+                        aggregator: "deadbeef")
+
+                NetworkService.shared.request(endpoint: .consumerCardConfirm(bodyRequest)) { (result: Result<ConsumerCardConfirmResponse, Error>) in
+                  switch result {
+                  case .success(let response):
+                    DispatchQueue.main.async {
+                      let viewControllerToPresent: UIViewController = ConsumerCardViewController(cardNumber: response.paymentDetails.virtualCard.cardNumber)
+                      self.navigationController?.show(viewControllerToPresent, sender: self)
+                    }
+                  case .failure(let error):
+                    fatalError(error.localizedDescription)
+                  }
+                }
+                // need authToken
               case .cancelled(let reason):
                 print("Need to handle cancelled")
               }
