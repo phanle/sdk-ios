@@ -31,6 +31,7 @@ final class CheckoutWebViewController:
   private var webView: WKWebView { view as! WKWebView }
 
   private var token: String = ""
+  private let consumerCardFlow: Bool
 
   private let cookieChangeCallback: (_ token: String) -> Void
 
@@ -38,12 +39,14 @@ final class CheckoutWebViewController:
 
   init(
     checkoutUrl: URL,
+    consumerCardFlow: Bool = false,
     cookieChangeCallback: @escaping (_ token: String) -> Void = { _ in return },
     completion: @escaping (_ result: CheckoutResult) -> Void
   ) {
     self.checkoutUrl = checkoutUrl
     self.completion = completion
     self.cookieChangeCallback = cookieChangeCallback
+    self.consumerCardFlow = consumerCardFlow
 
     super.init(nibName: nil, bundle: nil)
   }
@@ -74,6 +77,8 @@ final class CheckoutWebViewController:
     webView.allowsLinkPreview = false
     webView.navigationDelegate = self
     webView.scrollView.bounces = false
+
+    navigationController?.presentationController?.delegate = self
   }
 
   override func viewDidAppear(_ animated: Bool) {
@@ -170,8 +175,11 @@ final class CheckoutWebViewController:
 
     case (false, .success(let token)):
       decisionHandler(.cancel)
-      self.completion(.success(token: token))
-//      dismiss(animated: true) { self.completion(.success(token: token)) }
+      if consumerCardFlow {
+        self.completion(.success(token: token))
+      } else {
+        dismiss(animated: true) { self.completion(.success(token: token)) }
+      }
 
     case (false, .cancelled):
       decisionHandler(.cancel)

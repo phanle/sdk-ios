@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EnterAmountView: UIView {
+final class EnterAmountView: UIView {
 
   var amountField: UITextField = {
     let field = UITextField()

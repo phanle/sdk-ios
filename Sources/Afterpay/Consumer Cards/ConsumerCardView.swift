@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ConsumerCardView: UIView {
+final class ConsumerCardView: UIView {
   private let cardNumberLabel: UILabel
 
   init(cardNumber: String) {
@@ -36,6 +36,6 @@ class ConsumerCardView: UIView {
   }
 
   func updateCardNumber(with cardNumber: String) {
-    cardNumberLabel.text = cardNumber
+    cardNumberLabel.text = "Card number: \(cardNumber)"
   }
 }

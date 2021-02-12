@@ -142,6 +142,7 @@ final class ConsumerCardFlowViewController: UIViewController {
         DispatchQueue.main.async {
           self.currentScreen = .consumerCard(cardNumber: response.paymentDetails.virtualCard.cardNumber)
           self.navigationController?.popToRootViewController(animated: true)
+          self.navigationController?.presentationController?.delegate = .none
         }
       case .failure(let error):
         fatalError(error.localizedDescription)
@@ -159,6 +160,7 @@ final class ConsumerCardFlowViewController: UIViewController {
         DispatchQueue.main.async {
           let viewControllerToPresent: UIViewController = CheckoutWebViewController(
             checkoutUrl: response.redirectCheckoutUrl,
+            consumerCardFlow: true,
             cookieChangeCallback: self.cookieChangeCallback(authToken:),
             completion: { result in
               switch result {
