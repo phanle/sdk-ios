@@ -13,6 +13,7 @@ final class ConsumerCardFlowViewController: UIViewController {
   enum Screen {
     case welcome
     case amount
+    case consumerCard(cardNumber: String)
   }
 
   // View State
@@ -29,6 +30,7 @@ final class ConsumerCardFlowViewController: UIViewController {
 
   private let welcomeView: WelcomeView
   private let enterAmountView: EnterAmountView
+  private let consumerCardView: ConsumerCardView
 
   private var consumerCardToken: String
   private var token: String
@@ -45,6 +47,7 @@ final class ConsumerCardFlowViewController: UIViewController {
     // initiate views
     welcomeView = WelcomeView(continueAction: #selector(continueButtonAction))
     enterAmountView = EnterAmountView(continueAction: #selector(continueButtonAction))
+    consumerCardView = ConsumerCardView(cardNumber: "")
 
     self.checkoutCompletion = checkoutCompletion
 
@@ -66,6 +69,9 @@ final class ConsumerCardFlowViewController: UIViewController {
       subview = welcomeView
     case .amount:
       subview = enterAmountView
+    case .consumerCard(let cardNumber):
+      consumerCardView.updateCardNumber(with: cardNumber)
+      subview = consumerCardView
     }
 
     view.bringSubviewToFront(subview)
@@ -79,12 +85,15 @@ final class ConsumerCardFlowViewController: UIViewController {
 
     welcomeView.backgroundColor = view.backgroundColor
     enterAmountView.backgroundColor = view.backgroundColor
+    consumerCardView.backgroundColor  = view.backgroundColor
 
     welcomeView.translatesAutoresizingMaskIntoConstraints = false
     enterAmountView.translatesAutoresizingMaskIntoConstraints = false
+    consumerCardView.translatesAutoresizingMaskIntoConstraints = false
 
     view.addSubview(welcomeView)
     view.addSubview(enterAmountView)
+    view.addSubview(consumerCardView)
 
     reloadView()
   }
@@ -104,13 +113,40 @@ final class ConsumerCardFlowViewController: UIViewController {
       } catch {
         fatalError("\(error.localizedDescription)")
       }
+    default:
+      return
     }
   }
 
   // callback for cookie change
   func cookieChangeCallback(authToken: String) {
-    self.authToken = authToken
+    if !authToken.isEmpty {
+      self.authToken = authToken
+      print("token: \(self.authToken)")
+    }
+  }
 
+  // API Calls
+  private func callConsumerCardConfirmAPI(checkoutToken: String) {
+    let payload = ConsumerCardConfirmRequest(
+      consumerCardToken: self.consumerCardToken,
+      token: checkoutToken,
+      requestId: "",
+      xAuthToken: authToken,
+      aggregator: "deadbeef"
+    )
+
+    NetworkService.shared.request(endpoint: .consumerCardConfirm(payload)) { (result: Result<ConsumerCardConfirmResponse, Error>) in
+      switch result {
+      case .success(let response):
+        DispatchQueue.main.async {
+          self.currentScreen = .consumerCard(cardNumber: response.paymentDetails.virtualCard.cardNumber)
+          self.navigationController?.popToRootViewController(animated: true)
+        }
+      case .failure(let error):
+        fatalError(error.localizedDescription)
+      }
+    }
   }
 
   // Move this func away from view controller
@@ -118,8 +154,8 @@ final class ConsumerCardFlowViewController: UIViewController {
     NetworkService.shared.request(endpoint: .consumerCards(payload)) { (result: Result<ConsumerCardResponse, Error>) in
       switch result {
       case .success(let response):
-        self.token = response.token
         self.consumerCardToken = response.consumerCardToken
+
         DispatchQueue.main.async {
           let viewControllerToPresent: UIViewController = CheckoutWebViewController(
             checkoutUrl: response.redirectCheckoutUrl,
@@ -127,26 +163,10 @@ final class ConsumerCardFlowViewController: UIViewController {
             completion: { result in
               switch result {
               case .success(let token):
-                let bodyRequest = ConsumerCardConfirmRequest(consumerCardToken: self.consumerCardToken,
-                        token: token,
-                        requestId: "",
-                        xAuthToken: self.authToken,
-                        aggregator: "deadbeef")
-
-                NetworkService.shared.request(endpoint: .consumerCardConfirm(bodyRequest)) { (result: Result<ConsumerCardConfirmResponse, Error>) in
-                  switch result {
-                  case .success(let response):
-                    DispatchQueue.main.async {
-                      let viewControllerToPresent: UIViewController = ConsumerCardViewController(cardNumber: response.paymentDetails.virtualCard.cardNumber)
-                      self.navigationController?.show(viewControllerToPresent, sender: self)
-                    }
-                  case .failure(let error):
-                    fatalError(error.localizedDescription)
-                  }
-                }
+                self.callConsumerCardConfirmAPI(checkoutToken: token)
                 // need authToken
               case .cancelled(let reason):
-                print("Need to handle cancelled")
+                print("Need to handle cancelled. Error reason: \(reason)")
               }
             }
           )

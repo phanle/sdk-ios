@@ -97,13 +97,6 @@ final class CheckoutWebViewController:
     webView.load(request)
   }
 
-  override func viewWillDisappear(_ animated: Bool) {
-    // get the latest token value that is not nil
-    // call cookie change callback
-
-    cookieChangeCallback(token)
-  }
-
   // MARK: UIAdaptivePresentationControllerDelegate
 
   func presentationControllerShouldDismiss(
@@ -177,7 +170,8 @@ final class CheckoutWebViewController:
 
     case (false, .success(let token)):
       decisionHandler(.cancel)
-      dismiss(animated: true) { self.completion(.success(token: token)) }
+      self.completion(.success(token: token))
+//      dismiss(animated: true) { self.completion(.success(token: token)) }
 
     case (false, .cancelled):
       decisionHandler(.cancel)
@@ -229,15 +223,11 @@ final class CheckoutWebViewController:
   func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
     cookieStore.getAllCookies { [weak self] cookies in
       let authCookie = cookies.first { ($0.name == "pl_status" && $0.domain == "portalapi.us-sandbox.afterpay.com") }
-      // TODO: Use the token below for online card API
       guard let cookie = authCookie else {
         return
       }
 
-      if !cookie.value.isEmpty {
-        self?.token = cookie.value
-        print("token: \(self?.token)")
-      }
+      self?.cookieChangeCallback(cookie.value)
     }
   }
 

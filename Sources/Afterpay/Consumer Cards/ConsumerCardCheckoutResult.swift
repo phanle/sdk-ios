@@ -10,11 +10,6 @@ import Foundation
 
 @frozen public enum ConsumerCardCheckoutResult {
   case success(virtualCard: VirtualCard)
-//  case cancelled(reason: CancellationReason)
-//
-//  public enum CancellationReason {
-//    case userInitiated
-//    case networkError(Error)
-//    case invalidURL(URL)
-//  }
+
+  // TODO: Handle error
 }

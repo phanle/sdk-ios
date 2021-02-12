@@ -35,7 +35,7 @@
 		DD0C331A25D4E88C00B7496D /* EndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0C331925D4E88C00B7496D /* EndPoint.swift */; };
 		DD0C331E25D4EAD500B7496D /* ConsumerCardConfirm.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0C331D25D4EAD500B7496D /* ConsumerCardConfirm.swift */; };
 		DD18F41E25D5E1CD00E345C9 /* ConsumerCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD18F41D25D5E1CD00E345C9 /* ConsumerCardView.swift */; };
-		DD18F42425D5E46700E345C9 /* ConsumerCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD18F42325D5E46700E345C9 /* ConsumerCardViewController.swift */; };
+		DD18F42D25D61A1400E345C9 /* Macaw in Frameworks */ = {isa = PBXBuildFile; productRef = 6640C15124D8E1A700F7F4CC /* Macaw */; };
 		DD70770A25D2171C00401BDB /* ConsumerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70770925D2171C00401BDB /* ConsumerCard.swift */; };
 		DD70771725D223F400401BDB /* ConsumerCardFlowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70771625D223F400401BDB /* ConsumerCardFlowViewController.swift */; };
 		DD70771D25D2361900401BDB /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD70771C25D2361900401BDB /* WelcomeView.swift */; };
@@ -101,7 +101,6 @@
 		DD0C331925D4E88C00B7496D /* EndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoint.swift; sourceTree = "<group>"; };
 		DD0C331D25D4EAD500B7496D /* ConsumerCardConfirm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCardConfirm.swift; sourceTree = "<group>"; };
 		DD18F41D25D5E1CD00E345C9 /* ConsumerCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCardView.swift; sourceTree = "<group>"; };
-		DD18F42325D5E46700E345C9 /* ConsumerCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCardViewController.swift; sourceTree = "<group>"; };
 		DD70770925D2171C00401BDB /* ConsumerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCard.swift; sourceTree = "<group>"; };
 		DD70771625D223F400401BDB /* ConsumerCardFlowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsumerCardFlowViewController.swift; sourceTree = "<group>"; };
 		DD70771C25D2361900401BDB /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -127,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD18F42D25D61A1400E345C9 /* Macaw in Frameworks */,
 				6640C15724D9211800F7F4CC /* SwiftUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,7 +304,6 @@
 				DD70771C25D2361900401BDB /* WelcomeView.swift */,
 				DD70772025D2396F00401BDB /* EnterAmountView.swift */,
 				DD18F41D25D5E1CD00E345C9 /* ConsumerCardView.swift */,
-				DD18F42325D5E46700E345C9 /* ConsumerCardViewController.swift */,
 				DBBB85C0A5E2C784A538CD60 /* ConsumerCardCheckoutResult.swift */,
 			);
 			path = "Consumer Cards";
@@ -381,7 +380,7 @@
 			);
 			name = Afterpay;
 			packageProductDependencies = (
-				6640C15124D8E1A700F7F4CC,
+				6640C15124D8E1A700F7F4CC /* Macaw */,
 			);
 			productName = Afterpay;
 			productReference = 668F16072487653A0040345C /* Afterpay.framework */;
@@ -416,7 +415,7 @@
 			);
 			mainGroup = 668F15FD2487653A0040345C;
 			packageReferences = (
-				6640C15024D8E1A700F7F4CC,
+				6640C15024D8E1A700F7F4CC /* XCRemoteSwiftPackageReference "Macaw" */,
 			);
 			productRefGroup = 668F16082487653A0040345C /* Products */;
 			projectDirPath = "";
@@ -518,7 +517,6 @@
 				661CFDB62570E7F000D8A1E8 /* PaymentButton.swift in Sources */,
 				DDBD9C1F25D3B4F500008642 /* NetworkService.swift in Sources */,
 				662A3AED24A999A500EFD826 /* CheckoutResult.swift in Sources */,
-				DD18F42425D5E46700E345C9 /* ConsumerCardViewController.swift in Sources */,
 				667AD3542497121200BF94E5 /* CheckoutWebViewController.swift in Sources */,
 				66F9767C2499A11A001D38FA /* Afterpay.swift in Sources */,
 				66EE378724D39FC50029BF42 /* BadgeView.swift in Sources */,
@@ -622,7 +620,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6640C15024D8E1A700F7F4CC = {
+		6640C15024D8E1A700F7F4CC /* XCRemoteSwiftPackageReference "Macaw" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/Macaw";
 			requirement = {
@@ -633,9 +631,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6640C15124D8E1A700F7F4CC = {
+		6640C15124D8E1A700F7F4CC /* Macaw */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6640C15024D8E1A700F7F4CC;
+			package = 6640C15024D8E1A700F7F4CC /* XCRemoteSwiftPackageReference "Macaw" */;
 			productName = Macaw;
 		};
 /* End XCSwiftPackageProductDependency section */
