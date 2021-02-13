@@ -30,17 +30,16 @@ final class CheckoutWebViewController:
 
   private var webView: WKWebView { view as! WKWebView }
 
-  private var token: String = ""
   private let consumerCardFlow: Bool
 
-  private let cookieChangeCallback: (_ token: String) -> Void
+  private let cookieChangeCallback: (_ cookieStore: WKHTTPCookieStore) -> Void
 
   // MARK: Initialization
 
   init(
     checkoutUrl: URL,
     consumerCardFlow: Bool = false,
-    cookieChangeCallback: @escaping (_ token: String) -> Void = { _ in return },
+    cookieChangeCallback: @escaping (_ cookieStore: WKHTTPCookieStore) -> Void = { _ in return },
     completion: @escaping (_ result: CheckoutResult) -> Void
   ) {
     self.checkoutUrl = checkoutUrl
@@ -233,14 +232,7 @@ final class CheckoutWebViewController:
   // MARK: WKHTTPCookieStoreObserver
 
   func cookiesDidChange(in cookieStore: WKHTTPCookieStore) {
-    cookieStore.getAllCookies { [weak self] cookies in
-      let authCookie = cookies.first { ($0.name == "pl_status" && $0.domain == "portalapi.us-sandbox.afterpay.com") }
-      guard let cookie = authCookie else {
-        return
-      }
-
-      self?.cookieChangeCallback(cookie.value)
-    }
+    cookieChangeCallback(cookieStore)
   }
 
   // MARK: Unavailable
@@ -249,5 +241,4 @@ final class CheckoutWebViewController:
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
 }

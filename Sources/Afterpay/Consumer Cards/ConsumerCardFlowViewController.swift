@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebKit
 
 final class ConsumerCardFlowViewController: UIViewController {
 
@@ -140,16 +141,27 @@ final class ConsumerCardFlowViewController: UIViewController {
     consumerCardRequest.amount = Money(amount: amountValue, currency: consumerCardRequest.amount.currency)
     currentScreen = .loading
 
-    default:
-      return
+    do {
+      try callConsumerCardAPI(payload: consumerCardRequest)
+    } catch {
+      fatalError("\(error.localizedDescription)")
     }
   }
 
   // MARK: - Callbacks
-
-  private func cookieChangeCallback(authToken: String) {
-    if !authToken.isEmpty {
-      self.authToken = authToken
+  private func cookiesChangedCallback(cookieStore: WKHTTPCookieStore) {
+    cookieStore.getAllCookies { [weak self] cookies in
+      let authCookie = cookies.first {
+        let portalApiDomain = "portalapi.us-sandbox.afterpay.com"
+        let authCookieName = "pl_status"
+        return ($0.name == authCookieName && $0.domain == portalApiDomain)
+      }
+      guard let cookie = authCookie else {
+        return
+      }
+      if !cookie.value.isEmpty {
+        self?.authToken = cookie.value
+      }
     }
   }
 
@@ -201,7 +213,7 @@ final class ConsumerCardFlowViewController: UIViewController {
           let viewControllerToPresent: UIViewController = CheckoutWebViewController(
             checkoutUrl: response.redirectCheckoutUrl,
             consumerCardFlow: true,
-            cookieChangeCallback: self.cookieChangeCallback(authToken:),
+            cookieChangeCallback: cookiesChangedCallback(cookieStore:),
             completion: checkoutCompletion(_:)
           )
 
