@@ -47,8 +47,8 @@ final class ConsumerCardFlowViewController: UIViewController {
     self.consumerCardRequest = payload
 
     // initiate views
-    welcomeView = WelcomeView(continueAction: #selector(continueButtonAction))
-    enterAmountView = EnterAmountView(continueAction: #selector(continueButtonAction))
+    welcomeView = WelcomeView(continueAction: #selector(requireAmountAction))
+    enterAmountView = EnterAmountView(continueAction: #selector(triggerCheckoutFlowAction))
     consumerCardView = ConsumerCardView(cardNumber: "")
     loadingView = UIActivityIndicatorView()
     loadingView.hidesWhenStopped = false
@@ -130,22 +130,15 @@ final class ConsumerCardFlowViewController: UIViewController {
     ])
   }
 
-  @objc private func continueButtonAction() {
-    switch currentScreen {
-    case .welcome:
-      enterAmountView.amountField.text = consumerCardRequest.amount.amount
-      currentScreen = .amount
-    case .amount:
-      let amountValue = enterAmountView.amountField.text ?? "0.00"
+  @objc private func requireAmountAction() {
+    enterAmountView.amountField.text = consumerCardRequest.amount.amount
+    currentScreen = .amount
+  }
 
-      consumerCardRequest.amount = Money(amount: amountValue, currency: consumerCardRequest.amount.currency)
-      currentScreen = .loading
-
-      do {
-        try callConsumerCardAPI(payload: consumerCardRequest)
-      } catch {
-        fatalError("\(error.localizedDescription)")
-      }
+  @objc private func triggerCheckoutFlowAction() {
+    let amountValue = enterAmountView.amountField.text ?? "0.00"
+    consumerCardRequest.amount = Money(amount: amountValue, currency: consumerCardRequest.amount.currency)
+    currentScreen = .loading
 
     default:
       return
